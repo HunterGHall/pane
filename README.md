@@ -6,7 +6,7 @@ desktop app), with a custom borderless window chrome, live light/dark
 theming, and runtime accent-color switching — as a reusable class library
 and a starter template, not a framework you have to fight.
 
-![Pane widget gallery](docs/gallery-dark.png)
+
 
 ## What's in this repo
 
