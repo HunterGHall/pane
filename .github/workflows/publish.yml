@@ -1,0 +1,53 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build Pane.dll (Release)
+        run: dotnet build src/Pane/Pane.csproj -c Release
+
+      - name: Bundle native files into the Python package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path python/pane/_native
+          Copy-Item src/Pane/bin/Release/net8.0-windows/Pane.dll python/pane/_native/
+          @'
+          {
+            "runtimeOptions": {
+              "tfm": "net8.0",
+              "frameworks": [
+                { "name": "Microsoft.NETCore.App", "version": "8.0.0" },
+                { "name": "Microsoft.WindowsDesktop.App", "version": "8.0.0" }
+              ],
+              "rollForward": "LatestMinor"
+            }
+          }
+          '@ | Set-Content python/pane/_native/Pane.runtimeconfig.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - run: pip install build
+
+      - name: Build wheel
+        working-directory: python
+        run: python -m build
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: python/dist
