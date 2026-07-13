@@ -1,0 +1,57 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="ProgressBar">
+        <Setter Property="Height" Value="8" />
+        <Setter Property="Background" Value="{DynamicResource Pane.Brush.Background.SurfaceAlt}" />
+        <Setter Property="Foreground" Value="{DynamicResource Pane.Brush.Accent.Default}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Border x:Name="PART_Track"
+                            Background="{TemplateBinding Background}"
+                            ClipToBounds="True"
+                            CornerRadius="4">
+                        <Grid>
+                            <Border x:Name="PART_Indicator"
+                                    HorizontalAlignment="Left"
+                                    Background="{TemplateBinding Foreground}"
+                                    CornerRadius="4" />
+                            <Border x:Name="IndeterminateIndicator"
+                                    Width="110"
+                                    HorizontalAlignment="Left"
+                                    Background="{TemplateBinding Foreground}"
+                                    CornerRadius="4"
+                                    Opacity="0"
+                                    RenderTransformOrigin="0,0.5">
+                                <Border.RenderTransform>
+                                    <TranslateTransform x:Name="IndeterminateTransform" X="-110" />
+                                </Border.RenderTransform>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsIndeterminate" Value="True">
+                            <Setter TargetName="PART_Indicator" Property="Opacity" Value="0" />
+                            <Setter TargetName="IndeterminateIndicator" Property="Opacity" Value="1" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard x:Name="MarqueeStoryboard">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="IndeterminateTransform"
+                                                          Storyboard.TargetProperty="X"
+                                                          From="-110" To="650" Duration="0:0:1.4"
+                                                          RepeatBehavior="Forever" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="MarqueeStoryboard" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

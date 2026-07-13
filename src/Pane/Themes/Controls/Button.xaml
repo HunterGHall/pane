@@ -1,0 +1,75 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Default button = neutral/secondary. Opt into Pane.Button.Primary or Pane.Button.Ghost explicitly.  -->
+    <Style TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource Pane.Brush.Background.SurfaceAlt}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Pane.Brush.Border.Default}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource Pane.Brush.Text.Primary}" />
+        <Setter Property="FontFamily" Value="{DynamicResource Pane.Font.Family}" />
+        <Setter Property="FontSize" Value="{DynamicResource Pane.Font.Size.Body}" />
+        <Setter Property="Padding" Value="16,9" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="Base"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{DynamicResource Pane.Radius.Medium}" />
+                        <Border x:Name="Overlay"
+                                Background="{DynamicResource Pane.Brush.State.Hover}"
+                                CornerRadius="{DynamicResource Pane.Radius.Medium}"
+                                Opacity="0" />
+                        <Border x:Name="FocusRing"
+                                BorderBrush="{DynamicResource Pane.Brush.Accent.Default}"
+                                BorderThickness="1.5"
+                                CornerRadius="{DynamicResource Pane.Radius.Medium}"
+                                Margin="-2"
+                                Opacity="0" />
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                           RecognizesAccessKey="True" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Overlay" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Pane.Brush.State.Pressed}" />
+                            <Setter TargetName="Overlay" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="FocusRing" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Base" Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  Primary = filled accent, for the one main call-to-action on a view  -->
+    <Style x:Key="Pane.Button.Primary" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{DynamicResource Pane.Brush.Accent.Default}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource Pane.Brush.Text.OnAccent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!--  Ghost = no fill or border until interacted with, for low-emphasis actions  -->
+    <Style x:Key="Pane.Button.Ghost" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+</ResourceDictionary>

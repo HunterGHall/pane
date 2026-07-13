@@ -1,0 +1,22 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+python/build/
+python/dist/
+python/pane/_native/
+.venv/
+venv/
+*.venv/
+
+# OS
+Thumbs.db
+.DS_Store

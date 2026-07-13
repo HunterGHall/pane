@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pane-ui"
+version = "0.1.0"
+description = "Python bindings for Pane, a modern minimalist Windows UI engine built on WPF"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [
+    { name = "Hunter" },
+]
+keywords = ["wpf", "windows", "ui", "gui", "desktop", "pythonnet"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C#",
+    "Topic :: Software Development :: User Interfaces",
+    "Topic :: Software Development :: Widget Sets",
+]
+dependencies = [
+    "pythonnet>=3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/HunterH1218/pane"
+Repository = "https://github.com/HunterH1218/pane"
+Issues = "https://github.com/HunterH1218/pane/issues"
+
+[tool.setuptools.packages.find]
+include = ["pane*"]
+
+[tool.setuptools.package-data]
+pane = ["_native/*.dll", "_native/*.json"]

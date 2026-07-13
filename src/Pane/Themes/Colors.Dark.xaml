@@ -1,0 +1,65 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Backgrounds  -->
+    <Color x:Key="Pane.Color.Background.Window">#FF1A1817</Color>
+    <Color x:Key="Pane.Color.Background.Surface">#FF211E1D</Color>
+    <Color x:Key="Pane.Color.Background.SurfaceAlt">#FF2A2726</Color>
+    <Color x:Key="Pane.Color.Background.Elevated">#FF322E2C</Color>
+
+    <!--  Borders  -->
+    <Color x:Key="Pane.Color.Border.Default">#FF3A3532</Color>
+    <Color x:Key="Pane.Color.Border.Subtle">#FF2C2826</Color>
+    <Color x:Key="Pane.Color.Border.Strong">#FF4C4642</Color>
+
+    <!--  Text  -->
+    <Color x:Key="Pane.Color.Text.Primary">#FFF2EEEA</Color>
+    <Color x:Key="Pane.Color.Text.Secondary">#FFA69C93</Color>
+    <Color x:Key="Pane.Color.Text.Disabled">#FF6B635C</Color>
+    <Color x:Key="Pane.Color.Text.OnAccent">#FFFFFFFF</Color>
+
+    <!--  Accent  -->
+    <Color x:Key="Pane.Color.Accent.Default">#FFD97757</Color>
+    <Color x:Key="Pane.Color.Accent.Hover">#FFE08A6C</Color>
+    <Color x:Key="Pane.Color.Accent.Pressed">#FFC2653F</Color>
+    <Color x:Key="Pane.Color.Accent.Subtle">#29D97757</Color>
+
+    <!--  Interaction states  -->
+    <Color x:Key="Pane.Color.State.Hover">#0FFFFFFF</Color>
+    <Color x:Key="Pane.Color.State.Pressed">#1AFFFFFF</Color>
+    <Color x:Key="Pane.Color.State.DisabledBackground">#FF242120</Color>
+
+    <!--  Semantic  -->
+    <Color x:Key="Pane.Color.Success">#FF6FBF8B</Color>
+    <Color x:Key="Pane.Color.Warning">#FFE0B85C</Color>
+    <Color x:Key="Pane.Color.Danger">#FFE0665C</Color>
+
+    <!--  Brushes  -->
+    <SolidColorBrush x:Key="Pane.Brush.Background.Window" Color="{StaticResource Pane.Color.Background.Window}" />
+    <SolidColorBrush x:Key="Pane.Brush.Background.Surface" Color="{StaticResource Pane.Color.Background.Surface}" />
+    <SolidColorBrush x:Key="Pane.Brush.Background.SurfaceAlt" Color="{StaticResource Pane.Color.Background.SurfaceAlt}" />
+    <SolidColorBrush x:Key="Pane.Brush.Background.Elevated" Color="{StaticResource Pane.Color.Background.Elevated}" />
+
+    <SolidColorBrush x:Key="Pane.Brush.Border.Default" Color="{StaticResource Pane.Color.Border.Default}" />
+    <SolidColorBrush x:Key="Pane.Brush.Border.Subtle" Color="{StaticResource Pane.Color.Border.Subtle}" />
+    <SolidColorBrush x:Key="Pane.Brush.Border.Strong" Color="{StaticResource Pane.Color.Border.Strong}" />
+
+    <SolidColorBrush x:Key="Pane.Brush.Text.Primary" Color="{StaticResource Pane.Color.Text.Primary}" />
+    <SolidColorBrush x:Key="Pane.Brush.Text.Secondary" Color="{StaticResource Pane.Color.Text.Secondary}" />
+    <SolidColorBrush x:Key="Pane.Brush.Text.Disabled" Color="{StaticResource Pane.Color.Text.Disabled}" />
+    <SolidColorBrush x:Key="Pane.Brush.Text.OnAccent" Color="{StaticResource Pane.Color.Text.OnAccent}" />
+
+    <SolidColorBrush x:Key="Pane.Brush.Accent.Default" Color="{StaticResource Pane.Color.Accent.Default}" />
+    <SolidColorBrush x:Key="Pane.Brush.Accent.Hover" Color="{StaticResource Pane.Color.Accent.Hover}" />
+    <SolidColorBrush x:Key="Pane.Brush.Accent.Pressed" Color="{StaticResource Pane.Color.Accent.Pressed}" />
+    <SolidColorBrush x:Key="Pane.Brush.Accent.Subtle" Color="{StaticResource Pane.Color.Accent.Subtle}" />
+
+    <SolidColorBrush x:Key="Pane.Brush.State.Hover" Color="{StaticResource Pane.Color.State.Hover}" />
+    <SolidColorBrush x:Key="Pane.Brush.State.Pressed" Color="{StaticResource Pane.Color.State.Pressed}" />
+    <SolidColorBrush x:Key="Pane.Brush.State.DisabledBackground" Color="{StaticResource Pane.Color.State.DisabledBackground}" />
+
+    <SolidColorBrush x:Key="Pane.Brush.Success" Color="{StaticResource Pane.Color.Success}" />
+    <SolidColorBrush x:Key="Pane.Brush.Warning" Color="{StaticResource Pane.Color.Warning}" />
+    <SolidColorBrush x:Key="Pane.Brush.Danger" Color="{StaticResource Pane.Color.Danger}" />
+
+</ResourceDictionary>

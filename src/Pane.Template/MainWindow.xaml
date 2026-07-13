@@ -1,0 +1,253 @@
+<pane:PaneWindow x:Class="Pane.Template.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:controls="clr-namespace:Pane.Controls;assembly=Pane"
+                 xmlns:pane="clr-namespace:Pane;assembly=Pane"
+                 Title="Pane"
+                 Width="1180"
+                 Height="780"
+                 WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Sidebar  -->
+        <Border Grid.Column="0" Style="{StaticResource Pane.Sidebar}">
+            <DockPanel LastChildFill="True">
+                <StackPanel Margin="20,20,20,16" DockPanel.Dock="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="28" Height="28" Background="{DynamicResource Pane.Brush.Accent.Default}" CornerRadius="8" />
+                        <TextBlock Margin="10,0,0,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="{DynamicResource Pane.Font.Size.Subtitle}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Pane.Brush.Text.Primary}"
+                                   Text="Pane" />
+                    </StackPanel>
+                    <TextBlock Margin="0,4,0,0"
+                               FontSize="{DynamicResource Pane.Font.Size.Caption}"
+                               Foreground="{DynamicResource Pane.Brush.Text.Secondary}"
+                               Text="Widget gallery" />
+                </StackPanel>
+
+                <StackPanel Margin="16,10,16,16" DockPanel.Dock="Bottom">
+                    <TextBlock Margin="4,0,0,8"
+                               FontSize="{DynamicResource Pane.Font.Size.Caption}"
+                               Foreground="{DynamicResource Pane.Brush.Text.Secondary}"
+                               Text="Accent color" />
+                    <StackPanel Margin="4,0,0,14" Orientation="Horizontal">
+                        <Button Background="#D97757" Click="AccentSwatch_Click" Style="{StaticResource Pane.ColorSwatch}" />
+                        <Button Margin="8,0,0,0" Background="#4C82F7" Click="AccentSwatch_Click" Style="{StaticResource Pane.ColorSwatch}" />
+                        <Button Margin="8,0,0,0" Background="#4CAF6D" Click="AccentSwatch_Click" Style="{StaticResource Pane.ColorSwatch}" />
+                        <Button Margin="8,0,0,0" Background="#8B5CF6" Click="AccentSwatch_Click" Style="{StaticResource Pane.ColorSwatch}" />
+                        <Button Margin="8,0,0,0" Background="#EC6C9D" Click="AccentSwatch_Click" Style="{StaticResource Pane.ColorSwatch}" />
+                        <Button Margin="8,0,0,0" Background="#E0A83E" Click="AccentSwatch_Click" Style="{StaticResource Pane.ColorSwatch}" />
+                    </StackPanel>
+                    <Separator />
+                    <Grid Margin="4,10,4,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Dark mode" />
+                        <ToggleButton x:Name="ThemeToggle"
+                                      Grid.Column="1"
+                                      Checked="ThemeToggle_Checked"
+                                      IsChecked="True"
+                                      Style="{StaticResource Pane.ToggleSwitch}"
+                                      Unchecked="ThemeToggle_Unchecked" />
+                    </Grid>
+                </StackPanel>
+
+                <ListBox x:Name="NavList"
+                         SelectedIndex="0"
+                         SelectionChanged="NavList_SelectionChanged"
+                         Style="{StaticResource Pane.NavigationList}">
+                    <ListBoxItem Tag="{Binding ElementName=ButtonsSection}">
+                        <TextBlock Text="Buttons" />
+                    </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=SelectionSection}">
+                        <TextBlock Text="Selection" />
+                    </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=InputSection}">
+                        <TextBlock Text="Text input" />
+                    </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=ProgressSection}">
+                        <TextBlock Text="Progress &amp; sliders" />
+                    </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=ChoiceSection}">
+                        <TextBlock Text="Choices" />
+                    </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=ListsSection}">
+                        <TextBlock Text="Lists &amp; tabs" />
+                    </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=LayoutSection}">
+                        <TextBlock Text="Layout &amp; overlays" />
+                    </ListBoxItem>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!--  Content  -->
+        <ScrollViewer x:Name="ContentScroll" Grid.Column="1" Padding="40,32">
+            <StackPanel MaxWidth="720" HorizontalAlignment="Left">
+
+                <TextBlock FontSize="{DynamicResource Pane.Font.Size.TitleLarge}"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource Pane.Brush.Text.Primary}"
+                           Text="Pane widget gallery" />
+                <TextBlock Margin="0,6,0,28"
+                           Foreground="{DynamicResource Pane.Brush.Text.Secondary}"
+                           Text="Every widget below is a stock WPF control re-templated by Pane. Delete the sections you don't need and keep the rest - or copy a section into your own view."
+                           TextWrapping="Wrap" />
+
+                <!--  Buttons  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Buttons" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Secondary is the default Button style; opt into Primary or Ghost explicitly." />
+                <Border x:Name="ButtonsSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Secondary" />
+                        <Button Margin="10,0,0,0" Content="Primary" Style="{StaticResource Pane.Button.Primary}" />
+                        <Button Margin="10,0,0,0" Content="Ghost" Style="{StaticResource Pane.Button.Ghost}" />
+                        <Button Margin="10,0,0,0" Content="Disabled" IsEnabled="False" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Selection  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Selection" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Checkboxes, radio buttons and a toggle switch." />
+                <Border x:Name="SelectionSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="Unchecked" />
+                            <CheckBox Margin="20,0,0,0" Content="Checked" IsChecked="True" />
+                            <CheckBox Margin="20,0,0,0" Content="Indeterminate" IsChecked="{x:Null}" />
+                            <CheckBox Margin="20,0,0,0" Content="Disabled" IsEnabled="False" />
+                        </StackPanel>
+                        <StackPanel Margin="0,18,0,0" Orientation="Horizontal">
+                            <RadioButton Content="Option A" GroupName="Demo" IsChecked="True" />
+                            <RadioButton Margin="20,0,0,0" Content="Option B" GroupName="Demo" />
+                            <RadioButton Margin="20,0,0,0" Content="Option C" GroupName="Demo" />
+                        </StackPanel>
+                        <Grid Margin="0,18,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Enable notifications" />
+                            <ToggleButton Grid.Column="1" Margin="12,0,0,0" Style="{StaticResource Pane.ToggleSwitch}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!--  Text input  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Text input" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Text boxes support a Pane placeholder attached property; password entry masks input." />
+                <Border x:Name="InputSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <StackPanel>
+                        <TextBox Width="280" HorizontalAlignment="Left" controls:PaneAssist.Placeholder="Full name" />
+                        <TextBox Width="280"
+                                  Margin="0,12,0,0"
+                                  HorizontalAlignment="Left"
+                                  controls:PaneAssist.Placeholder="you@example.com" />
+                        <PasswordBox Width="280" Margin="0,12,0,0" HorizontalAlignment="Left" />
+                        <TextBox Width="280"
+                                  Margin="0,12,0,0"
+                                  HorizontalAlignment="Left"
+                                  IsEnabled="False"
+                                  Text="Disabled field" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Progress & sliders  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Progress &amp; sliders" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Determinate and indeterminate progress, plus a draggable slider." />
+                <Border x:Name="ProgressSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <StackPanel>
+                        <ProgressBar Width="320" HorizontalAlignment="Left" Value="62" />
+                        <ProgressBar Width="320" Margin="0,16,0,0" HorizontalAlignment="Left" IsIndeterminate="True" />
+                        <Slider Width="320"
+                                 Margin="0,20,0,0"
+                                 HorizontalAlignment="Left"
+                                 Maximum="100"
+                                 Minimum="0"
+                                 Value="40" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Choices  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Choices" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="A dropdown combo box." />
+                <Border x:Name="ChoiceSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <ComboBox Width="220" HorizontalAlignment="Left" SelectedIndex="0">
+                        <ComboBoxItem Content="Newest first" />
+                        <ComboBoxItem Content="Oldest first" />
+                        <ComboBoxItem Content="Alphabetical" />
+                        <ComboBoxItem Content="By size" />
+                    </ComboBox>
+                </Border>
+
+                <!--  Lists & tabs  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Lists &amp; tabs" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="A scrollable list box and a tabbed panel." />
+                <Border x:Name="ListsSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <StackPanel Orientation="Horizontal">
+                        <ListBox Width="200" Height="150" SelectedIndex="0">
+                            <ListBoxItem Content="Inbox" />
+                            <ListBoxItem Content="Drafts" />
+                            <ListBoxItem Content="Sent" />
+                            <ListBoxItem Content="Archive" />
+                            <ListBoxItem Content="Trash" />
+                        </ListBox>
+                        <TabControl Width="340" Height="150" Margin="20,0,0,0">
+                            <TabItem Header="Overview">
+                                <TextBlock Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Overview tab content." TextWrapping="Wrap" />
+                            </TabItem>
+                            <TabItem Header="Details">
+                                <TextBlock Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Details tab content." TextWrapping="Wrap" />
+                            </TabItem>
+                            <TabItem Header="Activity">
+                                <TextBlock Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Activity tab content." TextWrapping="Wrap" />
+                            </TabItem>
+                        </TabControl>
+                    </StackPanel>
+                </Border>
+
+                <!--  Layout & overlays  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Layout &amp; overlays" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Expander, group box, tooltip and a context menu." />
+                <Border x:Name="LayoutSection" Margin="0,0,0,40" Style="{StaticResource Pane.Card}">
+                    <StackPanel>
+                        <Expander Header="More details">
+                            <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Expanded content goes here." TextWrapping="Wrap" />
+                        </Expander>
+                        <GroupBox Margin="0,16,0,0" Header="Grouped settings">
+                            <StackPanel>
+                                <CheckBox Content="Send weekly summary" IsChecked="True" />
+                                <CheckBox Margin="0,10,0,0" Content="Allow desktop notifications" />
+                            </StackPanel>
+                        </GroupBox>
+                        <Separator Margin="0,16" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Hover for tooltip" ToolTip="This is a Pane-styled tooltip." />
+                            <Button Margin="10,0,0,0" Content="Right-click for menu">
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Cut" InputGestureText="Ctrl+X" />
+                                        <MenuItem Header="Copy" InputGestureText="Ctrl+C" />
+                                        <MenuItem Header="Paste" InputGestureText="Ctrl+V" />
+                                        <Separator />
+                                        <MenuItem Header="Delete" InputGestureText="Del" />
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</pane:PaneWindow>
