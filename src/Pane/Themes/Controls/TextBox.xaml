@@ -9,11 +9,19 @@
         <Setter Property="Foreground" Value="{DynamicResource Pane.Brush.Text.Primary}" />
         <Setter Property="CaretBrush" Value="{DynamicResource Pane.Brush.Accent.Default}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource Pane.Brush.Accent.Subtle}" />
-        <Setter Property="FontFamily" Value="{DynamicResource Pane.Font.Family}" />
+        <!--  Segoe UI Variable's own line-height/leading metrics run much taller than its
+              visible glyphs, and WPF has no supported way to override a plain TextBox's
+              internal line-box height (LineHeight/LineStackingStrategy are Block/TextBlock
+              properties - TextBox doesn't expose them). That oversized metric is what was
+              pushing the caret toward the top of an otherwise correctly-centered box, with
+              slack left below. Plain Segoe UI doesn't carry that oversized leading, so it's
+              used here for input controls specifically - everywhere else keeps Pane.Font.Family.  -->
+        <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="{DynamicResource Pane.Font.Size.Body}" />
         <Setter Property="Padding" Value="10,8" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -30,9 +38,18 @@
                                        IsHitTestVisible="False"
                                        Text="{TemplateBinding controls:PaneAssist.Placeholder}"
                                        Visibility="Collapsed" />
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <!--  No Margin here, even though PlaceholderText's is bound to Padding -
+                                  TextBoxBase already applies the TextBox's own Padding natively to
+                                  PART_ContentHost's content. Adding a Margin on top of that applies
+                                  padding twice for the real caret/text (though not for the sibling
+                                  placeholder, which gets no such native treatment) - that was the
+                                  original bug: real text/caret rendered padding-left + padding-left
+                                  from the placeholder's start, not padding-left once.
+                                  The remaining -2px left margin compensates for a small fixed inset
+                                  TextBoxBase adds on top of Padding when positioning its content,
+                                  measured directly against GetRectFromCharacterIndex(0) - without it
+                                  the caret still sits 2px right of where the placeholder starts.  -->
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="-2,0,0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
