@@ -13,7 +13,7 @@ _bootstrap.ensure_loaded()
 
 from System.Windows import Application, FontWeights, TextWrapping  # noqa: E402
 
-from ._convert import to_thickness  # noqa: E402
+from ._convert import to_color, to_thickness  # noqa: E402
 from ._events import make_handler  # noqa: E402
 
 _FONT_SIZE_KEYS = {
@@ -169,9 +169,20 @@ def slider(*, value=0, minimum=0, maximum=100, on_change=None, width=None, margi
 
 # --- Choices & lists ----------------------------------------------------------------
 
+def _selected_item(list_control, items):
+    """Maps the control's SelectedIndex back to the original Python item that
+    was passed in, so callbacks get the value the caller cares about instead
+    of having to look it back up by index themselves."""
+    index = list_control.SelectedIndex
+    return items[index] if 0 <= index < len(items) else None
+
+
 def combo_box(items, *, selected_index=0, on_change=None, width=None, margin=None, enabled=True):
+    """on_change (if it takes an argument) receives the selected item itself,
+    not its index - use cb.SelectedIndex on the returned control if you need that."""
     from System.Windows.Controls import ComboBox, ComboBoxItem
 
+    items = list(items)
     cb = ComboBox()
     for item in items:
         cbi = ComboBoxItem()
@@ -181,13 +192,16 @@ def combo_box(items, *, selected_index=0, on_change=None, width=None, margin=Non
         cb.SelectedIndex = selected_index
     _apply_common(cb, width=width, margin=margin, enabled=enabled)
     if on_change:
-        cb.SelectionChanged += make_handler(on_change, lambda: cb.SelectedIndex)
+        cb.SelectionChanged += make_handler(on_change, lambda: _selected_item(cb, items))
     return cb
 
 
 def list_box(items, *, selected_index=0, on_select=None, width=None, height=None, margin=None, enabled=True):
+    """on_select (if it takes an argument) receives the selected item itself,
+    not its index - use lb.SelectedIndex on the returned control if you need that."""
     from System.Windows.Controls import ListBox, ListBoxItem
 
+    items = list(items)
     lb = ListBox()
     for item in items:
         lbi = ListBoxItem()
@@ -197,14 +211,17 @@ def list_box(items, *, selected_index=0, on_select=None, width=None, height=None
         lb.SelectedIndex = selected_index
     _apply_common(lb, width=width, height=height, margin=margin, enabled=enabled)
     if on_select:
-        lb.SelectionChanged += make_handler(on_select, lambda: lb.SelectedIndex)
+        lb.SelectionChanged += make_handler(on_select, lambda: _selected_item(lb, items))
     return lb
 
 
 def nav_list(items, *, selected_index=0, on_select=None):
-    """A Pane-styled sidebar navigation list (see Pane.NavigationList)."""
+    """A Pane-styled sidebar navigation list (see Pane.NavigationList).
+    on_select (if it takes an argument) receives the selected item itself,
+    not its index - use lb.SelectedIndex on the returned control if you need that."""
     from System.Windows.Controls import ListBox, ListBoxItem
 
+    items = list(items)
     lb = ListBox()
     lb.Style = _find_style("Pane.NavigationList")
     for item in items:
@@ -214,7 +231,7 @@ def nav_list(items, *, selected_index=0, on_select=None):
     if items:
         lb.SelectedIndex = selected_index
     if on_select:
-        lb.SelectionChanged += make_handler(on_select, lambda: lb.SelectedIndex)
+        lb.SelectionChanged += make_handler(on_select, lambda: _selected_item(lb, items))
     return lb
 
 
@@ -282,25 +299,65 @@ def text(content, *, size="body", bold=False, color="primary", wrap=False, margi
     return tb
 
 
+def color_swatch(color, *, on_click=None, margin=None):
+    """A small round, clickable color swatch (see Pane.ColorSwatch) - e.g. for
+    an accent-color picker. color: anything accepted by to_color(); on_click
+    (if it takes an argument) receives that same color back."""
+    from System.Windows.Controls import Button
+    from System.Windows.Media import SolidColorBrush
+
+    swatch_color = to_color(color)
+    btn = Button()
+    btn.Style = _find_style("Pane.ColorSwatch")
+    btn.Background = SolidColorBrush(swatch_color)
+    _apply_common(btn, margin=margin)
+    if on_click:
+        btn.Click += make_handler(on_click, lambda: color)
+    return btn
+
+
 def set_tooltip(element, tooltip_text):
     element.ToolTip = tooltip_text
     return element
 
 
-def set_context_menu(element, items):
-    """items: a list of (label, on_click) pairs; use None for a separator."""
-    from System.Windows.Controls import ContextMenu, MenuItem, Separator
+def _add_menu_items(container, items):
+    """Shared by set_context_menu and menu_bar. items: a list of (label,
+    on_click) pairs, (label, sub_items) pairs for a nested submenu (sub_items
+    in this same format), or None for a separator."""
+    from System.Windows.Controls import MenuItem, Separator
 
-    menu = ContextMenu()
     for item in items:
         if item is None:
-            menu.Items.Add(Separator())
+            container.Items.Add(Separator())
             continue
-        label, on_click = item
+        label, value = item
         mi = MenuItem()
         mi.Header = label
-        if on_click:
-            mi.Click += make_handler(on_click, lambda: None)
-        menu.Items.Add(mi)
+        if isinstance(value, list):
+            _add_menu_items(mi, value)
+        elif value:
+            mi.Click += make_handler(value, lambda: None)
+        container.Items.Add(mi)
+
+
+def set_context_menu(element, items):
+    """items: a list of (label, on_click) pairs, (label, sub_items) pairs for
+    a submenu, or None for a separator."""
+    from System.Windows.Controls import ContextMenu
+
+    menu = ContextMenu()
+    _add_menu_items(menu, items)
     element.ContextMenu = menu
     return element
+
+
+def menu_bar(items):
+    """A Pane-styled top menu bar. items: a list of (header, sub_items)
+    pairs, where sub_items is itself a list in the same (label, on_click) /
+    (label, sub_items) / None format used by set_context_menu."""
+    from System.Windows.Controls import Menu
+
+    menu = Menu()
+    _add_menu_items(menu, items)
+    return menu

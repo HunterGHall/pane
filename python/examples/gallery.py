@@ -65,8 +65,8 @@ def build(window):
     choices_section = pane.card(
         pane.text("Choices & lists", size="subtitle", bold=True),
         pane.stack(
-            pane.combo_box(["Newest first", "Oldest first", "Alphabetical"], on_change=lambda i: show(f"Combo -> index {i}")),
-            pane.list_box(["Inbox", "Drafts", "Sent", "Archive"], height=110, on_select=lambda i: show(f"List -> index {i}")),
+            pane.combo_box(["Newest first", "Oldest first", "Alphabetical"], on_change=lambda choice: show(f"Combo -> {choice}")),
+            pane.list_box(["Inbox", "Drafts", "Sent", "Archive"], height=110, on_select=lambda item: show(f"List -> {item}")),
             spacing=10,
             margin=(0, 10, 0, 0),
         ),
@@ -84,16 +84,22 @@ def build(window):
     )
 
     accent_row = pane.stack(
-        pane.button("Terracotta", on_click=lambda: pane.set_accent("#D97757")),
-        pane.button("Blue", on_click=lambda: pane.set_accent("#4C82F7")),
-        pane.button("Green", on_click=lambda: pane.set_accent("#4CAF6D")),
+        pane.color_swatch("#D97757", on_click=lambda color: pane.set_accent(color)),
+        pane.color_swatch("#4C82F7", on_click=lambda color: pane.set_accent(color)),
+        pane.color_swatch("#4CAF6D", on_click=lambda color: pane.set_accent(color)),
         pane.button("Reset", style="ghost", on_click=pane.reset_accent),
         pane.toggle_switch(checked=True, on_change=lambda v: pane.set_theme("dark" if v else "light")),
         orientation="horizontal",
         spacing=10,
     )
 
-    window.Content = pane.scroll(
+    menu = pane.menu_bar([
+        ("File", [("New", lambda: show("File > New")), ("Open", lambda: show("File > Open")), None, ("Exit", pane.close)]),
+        ("Edit", [("Cut", lambda: show("Edit > Cut")), ("Copy", lambda: show("Edit > Copy")), ("Paste", lambda: show("Edit > Paste"))]),
+        ("Help", [("About", lambda: show("A Python-built Pane app."))]),
+    ])
+
+    body = pane.scroll(
         pane.stack(
             pane.text("Pane widget gallery (built from Python)", size="title-large", bold=True),
             log,
@@ -108,6 +114,11 @@ def build(window):
             margin=32,
         )
     )
+
+    # A plain stack would give the ScrollViewer unconstrained height and it
+    # would never scroll - grid's "auto" / "*" rows size the menu to its
+    # content and let the body fill (and clip/scroll within) what's left.
+    window.Content = pane.grid([(0, 0, menu), (1, 0, body)], rows=["auto", "*"])
 
 
 if __name__ == "__main__":

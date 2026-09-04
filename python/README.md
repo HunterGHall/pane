@@ -1,6 +1,6 @@
 # pane
 
-Python bindings for [Pane](https://github.com/HunterH1218/pane) — a modern, minimalist
+Python bindings for [Pane](https://github.com/HunterGHall/pane) — a modern, minimalist
 Windows UI engine built on WPF. Build real native Windows app UIs from Python:
 buttons, checkboxes, sliders, text input, tabs, live light/dark theming and
 accent-color switching, all with a single custom-chrome window.
@@ -43,8 +43,27 @@ available: `python examples/gallery.py`.
 
 `button`, `checkbox`, `radio_button`, `toggle_switch`, `text_box`,
 `password_box`, `progress_bar`, `slider`, `combo_box`, `list_box`, `nav_list`,
-`tab_control`, `expander`, `group_box`, `separator`, `text`, plus
-`set_tooltip` / `set_context_menu` helpers.
+`tab_control`, `expander`, `group_box`, `separator`, `text`, `color_swatch`,
+`menu_bar`, plus `set_tooltip` / `set_context_menu` helpers.
+
+`combo_box`, `list_box` and `nav_list` pass the *selected item itself* to
+`on_change`/`on_select` (not its index) - read `.SelectedIndex` off the
+returned control if you need that instead:
+
+```python
+pane.combo_box(["Newest first", "Oldest first"], on_change=lambda choice: print(choice))
+```
+
+`set_context_menu` and `menu_bar` share the same items format: a list of
+`(label, on_click)` pairs, `(label, sub_items)` pairs for a nested submenu, or
+`None` for a separator:
+
+```python
+pane.menu_bar([
+    ("File", [("New", on_new), ("Open", on_open), None, ("Exit", on_exit)]),
+    ("Edit", [("Cut", on_cut), ("Copy", on_copy), ("Paste", on_paste)]),
+])
+```
 
 ## Layout
 
