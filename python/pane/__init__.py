@@ -19,6 +19,7 @@ creates and drives the same native controls the WPF gallery app uses.
 """
 
 from .app import close, current_window, invoke, is_ui_thread, run
+from .chat import ChatPanel, chat_panel
 from .layout import card, grid, scroll, sidebar, stack
 from .theme import current_theme, reset_accent, set_accent, set_theme, toggle_theme
 from .widgets import (
@@ -80,4 +81,6 @@ __all__ = [
     "card",
     "sidebar",
     "scroll",
+    "chat_panel",
+    "ChatPanel",
 ]

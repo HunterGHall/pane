@@ -12,9 +12,10 @@ and a starter template, not a framework you have to fight.
 
 - **[`src/Pane`](src/Pane)** — the engine. A WPF class library with themed
   styles for every common control (buttons, checkboxes, sliders, text input,
-  tabs, menus, tooltips, ...), a `ThemeManager` for runtime light/dark and
-  accent-color switching, and a `PaneWindow` base class with custom chrome
-  (drag, minimize/maximize/restore/close, proper multi-monitor maximize).
+  tabs, menus, tooltips, chat bubbles, ...), a `ThemeManager` for runtime
+  light/dark and accent-color switching, and a `PaneWindow` base class with
+  custom chrome (drag, minimize/maximize/restore/close, proper multi-monitor
+  maximize).
 - **[`src/Pane.Template`](src/Pane.Template)** — a starter WPF app referencing
   the engine, with a full widget gallery you can trim down to what you need.
 - **[`python/`](python)** — Python bindings (`pip install pane-ui`) that

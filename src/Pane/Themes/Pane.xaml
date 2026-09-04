@@ -26,6 +26,7 @@
         <ResourceDictionary Source="pack://application:,,,/Pane;component/Themes/Controls/Separator.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Pane;component/Themes/Controls/Card.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Pane;component/Themes/Controls/ColorSwatch.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Pane;component/Themes/Controls/ChatBubble.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Pane;component/Themes/Controls/Window.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Pane;component/Themes/Controls/NavigationView.xaml" />
     </ResourceDictionary.MergedDictionaries>

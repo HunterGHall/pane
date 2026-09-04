@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        A single chat message bubble. These are plain Setter-only Border styles
+        (no ControlTemplate) - HorizontalAlignment on each style is what pins
+        user messages right / assistant messages left when the bubble sits in
+        a full-width row; see pane.chat_panel in the Python bindings for how
+        a scrolling list of these is assembled.
+    -->
+    <Style x:Key="Pane.ChatBubble.User" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Pane.Brush.Accent.Default}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Pane.Radius.Large}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="MaxWidth" Value="440" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+
+    <Style x:Key="Pane.ChatBubble.Assistant" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Pane.Brush.Background.Elevated}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Pane.Brush.Border.Default}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource Pane.Radius.Large}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="MaxWidth" Value="440" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+
+</ResourceDictionary>

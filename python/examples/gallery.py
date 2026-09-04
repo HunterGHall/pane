@@ -72,6 +72,19 @@ def build(window):
         ),
     )
 
+    # A no-network echo bot - chat_panel() itself doesn't know what "AI" is,
+    # it just gives you the widget. See examples/ai_chat.py for a real
+    # Claude-backed version of this same widget.
+    chat = pane.chat_panel(
+        on_send=lambda message: f"echo: {message}",
+        welcome="Hi! I just echo whatever you type - see ai_chat.py for a real Claude-backed chat.",
+        height=220,
+    )
+    chat_section = pane.card(
+        pane.text("Chat", size="subtitle", bold=True),
+        pane.stack(chat.control, margin=(0, 10, 0, 0)),
+    )
+
     overlays_section = pane.card(
         pane.text("Layout & overlays", size="subtitle", bold=True),
         pane.stack(
@@ -109,6 +122,7 @@ def build(window):
             text_section,
             progress_section,
             choices_section,
+            chat_section,
             overlays_section,
             spacing=20,
             margin=32,

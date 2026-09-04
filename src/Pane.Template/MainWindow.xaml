@@ -83,6 +83,9 @@
                     <ListBoxItem Tag="{Binding ElementName=ListsSection}">
                         <TextBlock Text="Lists &amp; tabs" />
                     </ListBoxItem>
+                    <ListBoxItem Tag="{Binding ElementName=ChatSection}">
+                        <TextBlock Text="Chat" />
+                    </ListBoxItem>
                     <ListBoxItem Tag="{Binding ElementName=LayoutSection}">
                         <TextBlock Text="Layout &amp; overlays" />
                     </ListBoxItem>
@@ -212,6 +215,20 @@
                                 <TextBlock Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Activity tab content." TextWrapping="Wrap" />
                             </TabItem>
                         </TabControl>
+                    </StackPanel>
+                </Border>
+
+                <!--  Chat  -->
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Chat" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Message bubbles for building a chat UI - see pane.chat_panel() in the Python bindings for a ready-made scrolling list + input row (and examples/ai_chat.py for a working Claude-backed chat app)." TextWrapping="Wrap" />
+                <Border x:Name="ChatSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
+                    <StackPanel>
+                        <Border Style="{StaticResource Pane.ChatBubble.Assistant}">
+                            <TextBlock Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Hi! What can I help you build today?" TextWrapping="Wrap" />
+                        </Border>
+                        <Border Margin="0,10,0,0" Style="{StaticResource Pane.ChatBubble.User}">
+                            <TextBlock Foreground="{DynamicResource Pane.Brush.Text.OnAccent}" Text="A desktop app with a chat panel, styled to match the rest of my UI." TextWrapping="Wrap" />
+                        </Border>
                     </StackPanel>
                 </Border>
 

@@ -44,7 +44,7 @@ available: `python examples/gallery.py`.
 `button`, `checkbox`, `radio_button`, `toggle_switch`, `text_box`,
 `password_box`, `progress_bar`, `slider`, `combo_box`, `list_box`, `nav_list`,
 `tab_control`, `expander`, `group_box`, `separator`, `text`, `color_swatch`,
-`menu_bar`, plus `set_tooltip` / `set_context_menu` helpers.
+`menu_bar`, `chat_panel`, plus `set_tooltip` / `set_context_menu` helpers.
 
 `combo_box`, `list_box` and `nav_list` pass the *selected item itself* to
 `on_change`/`on_select` (not its index) - read `.SelectedIndex` off the
@@ -64,6 +64,30 @@ pane.menu_bar([
     ("Edit", [("Cut", on_cut), ("Copy", on_copy), ("Paste", on_paste)]),
 ])
 ```
+
+## Chat
+
+`chat_panel()` is a scrollable, bubble-styled message list with an input
+row - it's just the UI, with no idea what "AI" means:
+
+```python
+chat = pane.chat_panel(
+    on_send=lambda text: f"you said: {text}",  # return a string for a quick
+                                                # synchronous reply, or None
+                                                # and call chat.add_message()
+                                                # yourself later (e.g. from a
+                                                # background thread via
+                                                # pane.invoke(), for an LLM
+                                                # call that takes real time)
+    placeholder="Message...",
+    welcome="Hi! What can I help with?",
+)
+window.Content = pane.stack(chat.control, margin=16)
+```
+
+See `examples/ai_chat.py` for a complete, working chat app wired up to
+Claude via the [Anthropic SDK](https://pypi.org/project/anthropic/)
+(`pip install anthropic`, set `ANTHROPIC_API_KEY`).
 
 ## Layout
 

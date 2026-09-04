@@ -4,7 +4,7 @@ Most Pane controls (checkboxes, radio buttons, text boxes, sliders, ...) are
 styled implicitly by Pane.xaml, so a plain `CheckBox()` picks up Pane's look
 automatically once it's added to a window built by pane.run(). Only the
 handful of controls with named styles (Button variants, ToggleSwitch, Card,
-ColorSwatch, NavigationList) need an explicit style lookup here.
+ColorSwatch, NavigationList, ChatBubble) need an explicit style lookup here.
 """
 
 from . import _bootstrap
@@ -28,6 +28,7 @@ _TEXT_COLOR_KEYS = {
     "primary": "Pane.Brush.Text.Primary",
     "secondary": "Pane.Brush.Text.Secondary",
     "disabled": "Pane.Brush.Text.Disabled",
+    "on-accent": "Pane.Brush.Text.OnAccent",
 }
 
 
