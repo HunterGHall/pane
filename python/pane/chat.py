@@ -3,7 +3,8 @@
 
 This module only builds the widget - it has no idea what "AI" means and
 makes no network calls. You supply that as an on_send callback; see
-examples/ai_chat.py for a complete, working Claude-backed chat app.
+examples/chat_app.py for a runnable template with a placeholder callback
+marking where a real backend would plug in.
 """
 
 from . import _bootstrap
@@ -66,7 +67,7 @@ def chat_panel(*, on_send=None, placeholder="Message...", welcome=None, width=No
     that takes real time (an HTTP call to an LLM), do that on a background
     thread instead and call the returned ChatPanel's
     `.add_message("assistant", reply)` yourself via pane.invoke() once the
-    reply is ready, so the window doesn't freeze - see examples/ai_chat.py.
+    reply is ready, so the window doesn't freeze - see examples/chat_app.py.
 
     welcome, if given, is added as an initial assistant message before the
     panel is returned.

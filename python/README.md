@@ -85,9 +85,11 @@ chat = pane.chat_panel(
 window.Content = pane.stack(chat.control, margin=16)
 ```
 
-See `examples/ai_chat.py` for a complete, working chat app wired up to
-Claude via the [Anthropic SDK](https://pypi.org/project/anthropic/)
-(`pip install anthropic`, set `ANTHROPIC_API_KEY`).
+See `examples/chat_app.py` for a runnable template - the widget, the input
+handling, and the recommended async-reply pattern (a background thread +
+`pane.invoke()`, so a slow call never freezes the window), with a single
+placeholder function (`get_reply()`) marking where you'd wire in a real
+backend of your choice.
 
 ## Layout
 

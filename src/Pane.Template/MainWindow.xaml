@@ -220,7 +220,7 @@
 
                 <!--  Chat  -->
                 <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Chat" />
-                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Message bubbles for building a chat UI - see pane.chat_panel() in the Python bindings for a ready-made scrolling list + input row (and examples/ai_chat.py for a working Claude-backed chat app)." TextWrapping="Wrap" />
+                <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource Pane.Brush.Text.Secondary}" Text="Message bubbles for building a chat UI - see pane.chat_panel() in the Python bindings for a ready-made scrolling list + input row (and examples/chat_app.py for a runnable template you can wire up to any backend)." TextWrapping="Wrap" />
                 <Border x:Name="ChatSection" Margin="0,0,0,28" Style="{StaticResource Pane.Card}">
                     <StackPanel>
                         <Border Style="{StaticResource Pane.ChatBubble.Assistant}">

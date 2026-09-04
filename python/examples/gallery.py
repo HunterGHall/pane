@@ -73,11 +73,12 @@ def build(window):
     )
 
     # A no-network echo bot - chat_panel() itself doesn't know what "AI" is,
-    # it just gives you the widget. See examples/ai_chat.py for a real
-    # Claude-backed version of this same widget.
+    # it just gives you the widget. See examples/chat_app.py for the same
+    # widget with the recommended async-reply (background thread +
+    # pane.invoke()) pattern, ready for you to wire up a real backend.
     chat = pane.chat_panel(
         on_send=lambda message: f"echo: {message}",
-        welcome="Hi! I just echo whatever you type - see ai_chat.py for a real Claude-backed chat.",
+        welcome="Hi! I just echo whatever you type - see chat_app.py for the async-reply template.",
         height=220,
     )
     chat_section = pane.card(
