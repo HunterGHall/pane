@@ -11,6 +11,7 @@ still reachable directly through the object's own WPF properties/methods.
 - [Widgets](widgets.md) - buttons, inputs, lists, menus, and every other control
 - [Layout](layout.md) - `stack`, `grid`, `card`, `sidebar`, `scroll`
 - [Chat](chat.md) - `chat_panel()`, the message-bubble widget
+- [Music player](music.md) - `music_player()`, the transport/seek/volume widget
 - [Theming](theming.md) - light/dark mode, accent colors
 - [Events](events.md) - the `on_*` callback convention
 - [Threading](threading.md) - `pane.invoke()` and background work

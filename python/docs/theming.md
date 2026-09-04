@@ -14,4 +14,4 @@ Every widget re-themes live, mid-run - no restart needed.
 [`pane.run(..., theme="light")`](getting-started.md) sets the starting
 theme.
 
-← [Chat](chat.md) · Next: [Events](events.md) →
+← [Music player](music.md) · Next: [Events](events.md) →

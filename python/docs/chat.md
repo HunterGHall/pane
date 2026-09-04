@@ -46,4 +46,4 @@ widget. `on_send(text)`:
 
 See `examples/chat_app.py` in the repo for a complete, runnable template.
 
-← [Layout](layout.md) · Next: [Theming](theming.md) →
+← [Layout](layout.md) · Next: [Music player](music.md) →
