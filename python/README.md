@@ -39,90 +39,20 @@ pane.run(build, title="My App")
 Run the full widget gallery from the source repo for a tour of everything
 available: `python examples/gallery.py`.
 
-## Widgets
+## Documentation
 
-`button`, `checkbox`, `radio_button`, `toggle_switch`, `text_box`,
-`password_box`, `progress_bar`, `slider`, `combo_box`, `list_box`, `nav_list`,
-`tab_control`, `expander`, `group_box`, `separator`, `text`, `color_swatch`,
-`menu_bar`, `chat_panel`, plus `set_tooltip` / `set_context_menu` helpers.
+**[Full API reference](docs/README.md)** - every widget, layout helper, the
+chat panel, theming, events, and the threading model:
 
-`combo_box`, `list_box` and `nav_list` pass the *selected item itself* to
-`on_change`/`on_select` (not its index) - read `.SelectedIndex` off the
-returned control if you need that instead:
-
-```python
-pane.combo_box(["Newest first", "Oldest first"], on_change=lambda choice: print(choice))
-```
-
-`set_context_menu` and `menu_bar` share the same items format: a list of
-`(label, on_click)` pairs, `(label, sub_items)` pairs for a nested submenu, or
-`None` for a separator:
-
-```python
-pane.menu_bar([
-    ("File", [("New", on_new), ("Open", on_open), None, ("Exit", on_exit)]),
-    ("Edit", [("Cut", on_cut), ("Copy", on_copy), ("Paste", on_paste)]),
-])
-```
-
-## Chat
-
-`chat_panel()` is a scrollable, bubble-styled message list with an input
-row - it's just the UI, with no idea what "AI" means:
-
-```python
-chat = pane.chat_panel(
-    on_send=lambda text: f"you said: {text}",  # return a string for a quick
-                                                # synchronous reply, or None
-                                                # and call chat.add_message()
-                                                # yourself later (e.g. from a
-                                                # background thread via
-                                                # pane.invoke(), for an LLM
-                                                # call that takes real time)
-    placeholder="Message...",
-    welcome="Hi! What can I help with?",
-)
-window.Content = pane.stack(chat.control, margin=16)
-```
-
-See `examples/chat_app.py` for a runnable template - the widget, the input
-handling, and the recommended async-reply pattern (a background thread +
-`pane.invoke()`, so a slow call never freezes the window), with a single
-placeholder function (`get_reply()`) marking where you'd wire in a real
-backend of your choice.
-
-## Layout
-
-`stack(*children, orientation=, spacing=, margin=)`,
-`grid(children, rows=, columns=)`, `card(*children)`, `sidebar(*children)`,
-`scroll(child)`.
-
-## Theming
-
-```python
-pane.set_theme("light")        # or "dark"
-pane.toggle_theme()
-pane.set_accent("#4C82F7")     # hex string or (r, g, b) tuple
-pane.reset_accent()
-```
-
-Every widget re-themes live, mid-run, no restart needed.
-
-## Events
-
-Callbacks adapt to whatever you write - zero args or one:
-
-```python
-pane.button("Save", on_click=lambda: print("saved"))
-pane.slider(on_change=lambda value: print(value))
-```
-
-## Threading
-
-`pane.run(builder)` builds the window on a dedicated UI thread and blocks
-until it's closed. Build your widget tree inside `builder`. To update the UI
-later from another thread (a timer, a background task), use
-`pane.invoke(fn)` to marshal back onto the UI thread.
+- [Getting started](docs/getting-started.md) - `pane.run()` and the builder pattern
+- [The window](docs/window.md) - the real WPF `Window` object, fullscreen/state
+- [Widgets](docs/widgets.md) - buttons, inputs, lists, menus, and every other control
+- [Layout](docs/layout.md) - `stack`, `grid`, `card`, `sidebar`, `scroll`
+- [Chat](docs/chat.md) - `chat_panel()`, the message-bubble widget
+- [Theming](docs/theming.md) - light/dark mode, accent colors
+- [Events](docs/events.md) - the `on_*` callback convention
+- [Threading](docs/threading.md) - `pane.invoke()` and background work
+- [Value conversion](docs/value-conversion.md) - `to_thickness()`, `to_color()`
 
 ## License
 
