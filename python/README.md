@@ -50,6 +50,7 @@ chat panel, the music player, theming, events, and the threading model:
 - [Layout](docs/layout.md) - `stack`, `grid`, `card`, `sidebar`, `scroll`
 - [Chat](docs/chat.md) - `chat_panel()`, the message-bubble widget
 - [Music player](docs/music.md) - `music_player()`, the transport/seek/volume widget
+- [Playlist](docs/playlist.md) - `playlist()`, the track-list widget
 - [Theming](docs/theming.md) - light/dark/system mode, accent colors, custom palettes
 - [Events](docs/events.md) - the `on_*` callback convention
 - [Threading](docs/threading.md) - `pane.invoke()` and background work

@@ -75,4 +75,4 @@ A custom theme persists across `set_theme()` calls - including a live
 current theme's defaults. (`reset_custom_theme()` doesn't touch a separately
 set accent; call `reset_accent()` too if you want that reset as well.)
 
-← [Music player](music.md) · Next: [Events](events.md) →
+← [Playlist](playlist.md) · Next: [Events](events.md) →

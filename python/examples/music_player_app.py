@@ -1,16 +1,19 @@
 """
-A template music player built on pane.music_player() - the UI, the
-transport wiring, and a fake in-memory "backend" (a hardcoded playlist and
-a timer that pretends to advance playback), with NO real audio anywhere.
+A template music player built on pane.music_player() + pane.playlist() -
+the UI, the transport/list wiring, and a fake in-memory "backend" (a
+hardcoded playlist and a timer that pretends to advance playback), with NO
+real audio anywhere.
 
-pane.music_player() has no idea how to play audio and makes no attempt to -
-it's just a styled artwork/title/artist/transport/repeat/seek/volume widget
-(see pane/music.py). Everything below that actually looks like a music
-player - the playlist, the position ticking forward, auto-advancing at the
-end of a track, honoring whichever repeat mode is selected - is this file
-simulating one so you can see the wiring, ticker() in particular. Swap
-PLAYLIST and the body of ticker() for a real backend (pygame.mixer, VLC,
-a media API, ...) and this becomes a real player.
+Neither widget has any idea how to play audio and neither makes an attempt
+to - music_player() is just a styled artwork/title/artist/transport/
+repeat/seek/volume widget, and playlist() is just a styled, clickable track
+list (see pane/music.py and pane/playlist.py). Everything below that
+actually looks like a music player - the playlist data itself, the
+position ticking forward, auto-advancing at the end of a track, honoring
+whichever repeat mode is selected, removing a track on click - is this
+file simulating one so you can see the wiring, ticker() in particular.
+Swap PLAYLIST and the body of ticker() for a real backend (pygame.mixer,
+VLC, a media API, ...) and this becomes a real player.
 
 Run: python examples/music_player_app.py
 """
@@ -33,13 +36,44 @@ PLAYLIST = [
 
 state = {"index": 0, "position": 0, "playing": False}
 player = None  # set in build()
+player_list = None  # set in build()
 
 
 def load_track(index):
+    if not PLAYLIST:  # every track removed via the playlist's "✕" buttons
+        return
     state["index"] = index % len(PLAYLIST)
     state["position"] = 0
     title, artist, duration = PLAYLIST[state["index"]]
     player.set_track(title, artist, duration=duration)
+    player_list.set_current_index(state["index"])
+
+
+def on_playlist_select(track):
+    # playlist() hands back whatever tracks= gave it - here that's a
+    # (title, artist, duration) tuple straight out of PLAYLIST, so its
+    # index in PLAYLIST is its index in the (unchanged) list itself.
+    load_track(PLAYLIST.index(track))
+    state["playing"] = True
+    player.set_playing(True)
+
+
+def on_playlist_remove(index):
+    # playlist() has no playlist of its own to remove from (see
+    # docs/playlist.md) - it's on this callback to update the real list and
+    # push the result back with set_tracks().
+    del PLAYLIST[index]
+    if not PLAYLIST:
+        state["playing"] = False
+        player.set_playing(False)
+        player_list.set_tracks(PLAYLIST)
+        return
+    if index < state["index"]:
+        state["index"] -= 1
+    elif index == state["index"]:
+        load_track(state["index"])  # current track removed - load whatever shifted into its slot
+    player_list.set_tracks(PLAYLIST)
+    player_list.set_current_index(state["index"])
 
 
 def on_play_pause(is_playing):
@@ -105,7 +139,7 @@ def ticker():
 
 
 def build(window):
-    global player
+    global player, player_list
     player = pane.music_player(
         on_play_pause=on_play_pause,
         on_previous=on_previous,
@@ -115,11 +149,17 @@ def build(window):
         on_repeat_change=on_repeat_change,
         width=280,
     )
+    player_list = pane.playlist(
+        PLAYLIST,
+        on_select=on_playlist_select,
+        on_remove=on_playlist_remove,
+        width=280,
+    )
     load_track(0)
-    window.Content = pane.stack(player.control, margin=20)
+    window.Content = pane.stack(player.control, player_list.control, spacing=16, margin=20)
 
     threading.Thread(target=ticker, daemon=True).start()
 
 
 if __name__ == "__main__":
-    pane.run(build, title="Pane - music player template", width=340, height=340)
+    pane.run(build, title="Pane - music player template", width=340, height=560)

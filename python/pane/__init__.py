@@ -22,6 +22,7 @@ from .app import close, current_window, invoke, is_ui_thread, run
 from .chat import ChatPanel, chat_panel
 from .layout import card, grid, scroll, sidebar, stack
 from .music import REPEAT_MODES, MusicPlayer, music_player
+from .playlist import Playlist, playlist
 from .theme import (
     current_theme,
     on_theme_change,
@@ -101,4 +102,6 @@ __all__ = [
     "music_player",
     "MusicPlayer",
     "REPEAT_MODES",
+    "playlist",
+    "Playlist",
 ]
