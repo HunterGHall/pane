@@ -51,6 +51,18 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Follow system theme" />
+                        <ToggleButton x:Name="SystemThemeToggle"
+                                      Grid.Column="1"
+                                      Checked="SystemThemeToggle_Checked"
+                                      Style="{StaticResource Pane.ToggleSwitch}"
+                                      Unchecked="SystemThemeToggle_Unchecked" />
+                    </Grid>
+                    <Grid Margin="4,10,4,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource Pane.Brush.Text.Primary}" Text="Dark mode" />
                         <ToggleButton x:Name="ThemeToggle"
                                       Grid.Column="1"

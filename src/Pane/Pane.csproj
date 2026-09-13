@@ -10,4 +10,12 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- For PaneThemeMode.System: SystemEvents.UserPreferenceChanged, to notice a live
+         Windows light/dark switch. UseWPF pulls this assembly in transitively via the
+         WindowsDesktop shared framework, but it's referenced explicitly here so that
+         isn't an assumption the build silently depends on. -->
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
+  </ItemGroup>
+
 </Project>

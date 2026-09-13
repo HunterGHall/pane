@@ -86,15 +86,19 @@ See [`python/README.md`](python/README.md) for the full Python API.
 
 ```csharp
 ThemeManager.SetTheme(PaneTheme.Light);
+ThemeManager.SetThemeMode(PaneThemeMode.System); // follow Windows light/dark, live
 ThemeManager.SetAccentColor(Color.FromRgb(0x4C, 0x82, 0xF7));
+ThemeManager.SetCustomTheme(new PaneThemeColors { Surface = Color.FromRgb(0x20, 0x24, 0x2B) });
 ```
 
 ```python
-pane.set_theme("light")
+pane.set_theme("light")           # or "system" to follow Windows live
 pane.set_accent("#4C82F7")
+pane.set_custom_theme(surface="#20242B")
 ```
 
-Every widget re-themes live, mid-run — no restart needed either way.
+Every widget re-themes live, mid-run — no restart needed either way. See
+[Theming](python/docs/theming.md) for the full palette you can override.
 
 ## Requirements
 

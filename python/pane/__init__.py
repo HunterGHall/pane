@@ -22,7 +22,17 @@ from .app import close, current_window, invoke, is_ui_thread, run
 from .chat import ChatPanel, chat_panel
 from .layout import card, grid, scroll, sidebar, stack
 from .music import REPEAT_MODES, MusicPlayer, music_player
-from .theme import current_theme, reset_accent, set_accent, set_theme, toggle_theme
+from .theme import (
+    current_theme,
+    on_theme_change,
+    reset_accent,
+    reset_custom_theme,
+    set_accent,
+    set_custom_theme,
+    set_theme,
+    theme_mode,
+    toggle_theme,
+)
 from .widgets import (
     button,
     checkbox,
@@ -55,8 +65,12 @@ __all__ = [
     "set_theme",
     "toggle_theme",
     "current_theme",
+    "theme_mode",
+    "on_theme_change",
     "set_accent",
     "reset_accent",
+    "set_custom_theme",
+    "reset_custom_theme",
     "button",
     "checkbox",
     "radio_button",

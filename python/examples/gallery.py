@@ -97,12 +97,37 @@ def build(window):
         ),
     )
 
+    # Guards against the toggle_switch's own on_change re-entering set_theme() while
+    # sync_theme_toggle() is only reflecting a live "system" switch, not a click.
+    syncing_theme_toggle = False
+
+    def on_theme_toggle_change(is_dark):
+        nonlocal syncing_theme_toggle
+        if syncing_theme_toggle:
+            return
+        pane.set_theme("dark" if is_dark else "light")
+
+    theme_toggle = pane.toggle_switch(checked=True, on_change=on_theme_toggle_change)
+
+    def on_follow_system_change(following):
+        theme_toggle.IsEnabled = not following
+        pane.set_theme("system" if following else ("dark" if theme_toggle.IsChecked else "light"))
+
+    def sync_theme_toggle(theme):
+        nonlocal syncing_theme_toggle
+        syncing_theme_toggle = True
+        theme_toggle.IsChecked = theme == "dark"
+        syncing_theme_toggle = False
+
+    pane.on_theme_change(sync_theme_toggle)
+
     accent_row = pane.stack(
         pane.color_swatch("#D97757", on_click=lambda color: pane.set_accent(color)),
         pane.color_swatch("#4C82F7", on_click=lambda color: pane.set_accent(color)),
         pane.color_swatch("#4CAF6D", on_click=lambda color: pane.set_accent(color)),
         pane.button("Reset", style="ghost", on_click=pane.reset_accent),
-        pane.toggle_switch(checked=True, on_change=lambda v: pane.set_theme("dark" if v else "light")),
+        theme_toggle,
+        pane.checkbox("Follow system theme", on_change=on_follow_system_change),
         orientation="horizontal",
         spacing=10,
     )

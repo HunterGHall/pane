@@ -6,7 +6,7 @@ from . import _bootstrap
 
 _bootstrap.ensure_loaded()
 
-from Pane import PaneTheme, PaneWindow, ThemeManager  # noqa: E402
+from Pane import PaneThemeMode, PaneWindow, ThemeManager  # noqa: E402
 from System import Action, Uri  # noqa: E402
 from System.Threading import ApartmentState, Thread  # noqa: E402
 from System.Threading import ThreadStart  # noqa: E402
@@ -52,6 +52,9 @@ def close():
     invoke(lambda: _state["window"].Close())
 
 
+_THEME_MODES = {"dark": PaneThemeMode.Dark, "light": PaneThemeMode.Light, "system": PaneThemeMode.System}
+
+
 def run(builder, *, title="Pane App", width=1000, height=700, theme="dark", resizable=True):
     """
     Builds and shows a window, then blocks the calling thread until it's closed.
@@ -60,6 +63,9 @@ def run(builder, *, title="Pane App", width=1000, height=700, theme="dark", resi
     shown - build your widget tree there and assign it to `window.Content`.
     Use pane.button(...), pane.stack(...), etc. only inside `builder` (or
     inside a callback that pane.invoke()s back onto the UI thread).
+
+    theme: "dark", "light", or "system" (follow the Windows light/dark
+    setting live for as long as the window is open) - see pane.set_theme().
     """
     ready = threading.Event()
     error_box = {}
@@ -75,7 +81,7 @@ def run(builder, *, title="Pane App", width=1000, height=700, theme="dark", resi
             merged.Source = Uri(_PANE_XAML_URI)
             app.Resources.MergedDictionaries.Add(merged)
 
-            ThemeManager.Initialize(PaneTheme.Dark if theme == "dark" else PaneTheme.Light)
+            ThemeManager.Initialize(_THEME_MODES.get(theme, PaneThemeMode.Dark))
 
             window = PaneWindow()
             window.Title = title
