@@ -9,9 +9,12 @@ namespace Pane;
 /// Base class for windows using the Pane.Window style. SystemCommands (minimize/maximize/
 /// restore/close) require a CommandBinding to actually execute, and CommandBindings isn't a
 /// styleable property, so it has to be registered here in code rather than in the Style.
-/// It also fixes the classic WindowStyle="None" + maximize bug where the window expands over
-/// the taskbar: without this hook, Windows maximizes borderless windows to the full monitor
-/// bounds instead of the work area.
+/// It also fixes two classic WindowStyle="None" + maximize bugs: without this hook, Windows
+/// maximizes borderless windows to the full monitor bounds instead of the work area (covering
+/// the taskbar), and separately still reserves its standard resize-frame margin around a
+/// maximized borderless window even though nothing is drawn there - leaving the window short
+/// of the true screen edges by that margin (~8px at 100% DPI) on every side, so edge-pinned
+/// controls like a top-right close button end up unreachable in the actual corner.
 /// </summary>
 public class PaneWindow : Window
 {
@@ -64,20 +67,45 @@ public class PaneWindow : Window
             var workArea = monitorInfo.rcWork;
             var monitorArea = monitorInfo.rcMonitor;
 
+            // For a WS_THICKFRAME (resizable) window, Windows positions a maximized
+            // window itself using its own frame-margin math and ignores whatever
+            // ptMaxPosition says here (measured: requesting 0 here still results in
+            // an actual position of -frameX/-frameY - Windows' own default, not
+            // ours) - but it does honor ptMaxSize exactly as given. Net effect
+            // without compensating: the window's top/left sit frameX/frameY off
+            // the true screen edges (harmless, off-screen) while its right/bottom
+            // edges fall the same amount *short* of the true work-area edges (the
+            // classic "8px gap" borderless-WPF-maximize bug - the window looks
+            // maximized but doesn't quite reach the screen edges, and edge-pinned
+            // controls like a top-right close button end up sitting short of where
+            // a user's mouse actually reaches). Adding that same margin once to
+            // ptMaxSize (position is left as the plain work-area-relative value -
+            // adjusting it further has no effect, per the above) grows the window
+            // by exactly enough to cancel the gap back out on the far edges.
+            int frameX = GetSystemMetrics(SM_CXSIZEFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER);
+            int frameY = GetSystemMetrics(SM_CYSIZEFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER);
+
             mmi.ptMaxPosition.X = workArea.Left - monitorArea.Left;
             mmi.ptMaxPosition.Y = workArea.Top - monitorArea.Top;
-            mmi.ptMaxSize.X = workArea.Right - workArea.Left;
-            mmi.ptMaxSize.Y = workArea.Bottom - workArea.Top;
+            mmi.ptMaxSize.X = (workArea.Right - workArea.Left) + frameX;
+            mmi.ptMaxSize.Y = (workArea.Bottom - workArea.Top) + frameY;
         }
 
         Marshal.StructureToPtr(mmi, lParam, true);
     }
+
+    private const int SM_CXSIZEFRAME = 32;
+    private const int SM_CYSIZEFRAME = 33;
+    private const int SM_CXPADDEDBORDER = 92;
 
     [DllImport("user32.dll")]
     private static extern IntPtr MonitorFromWindow(IntPtr handle, uint flags);
 
     [DllImport("user32.dll")]
     private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+    [DllImport("user32.dll")]
+    private static extern int GetSystemMetrics(int nIndex);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct POINT
