@@ -24,4 +24,17 @@ echo "== task-tracker =="
   echo "$out" | grep -q '^1\. \[x\] Learn Bend$'
 )
 
+echo "== expression-calculator =="
+(
+  cd expression-calculator
+  bend check main.bend
+  out="$(bend run-c tests.bend)"
+  echo "$out"
+  echo "$out" | grep -q '^16 passed, 0 failed$'
+  out="$(printf '2 + 3 * (4 - 1)\n10 / (5 - 5)\nquit\n' | bend run-c main.bend)"
+  echo "$out"
+  echo "$out" | grep -q '^= 11$'
+  echo "$out" | grep -q '^error: division by zero$'
+)
+
 echo "All capstones OK"

@@ -153,7 +153,8 @@ def main() -> IO(u24):
     return wrap(0)
 ```
 
-(When standard input is at end-of-file with nothing left to read, `IO/input` produces an `Err`.)
+!!! warning
+    In Bend 0.2.38, `IO/input()` does **not** return when standard input has reached end-of-file — the program hangs (and is silently stopped by a timeout if you use one). Always give an interactive or piped program an explicit end marker: a `quit` command or a blank line, as the loop below does.
 
 ### Command-line arguments
 

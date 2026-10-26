@@ -279,7 +279,7 @@ def main(path):
 
 **Commands.** `handle` is one big `with IO:` block with an `if`/`elif` chain on the command word. Each branch computes the new task list, optionally prints, saves, and `return wrap(tasks)`. The result flows back into `repl`, which calls itself with it.
 
-**The loop and the exit.** `repl` reads a line with `IO/input()`; `quit` (or end of input) ends the recursion, otherwise it recurses with the updated list. Recursion in `IO` costs no stack, so a session can be arbitrarily long.
+**The loop and the exit.** `repl` reads a line with `IO/input()`; `quit` ends the recursion (there is no end-of-input handling: in Bend 0.2.38 `IO/input()` hangs at end-of-file, so always finish a scripted session with `quit`), otherwise it recurses with the updated list. Recursion in `IO` costs no stack, so a session can be arbitrarily long.
 
 **Entry point.** `main(path)` receives the file name from the command line (`'"tasks.txt"'` — the quotes make it a Bend string), loads the tasks and starts the loop.
 

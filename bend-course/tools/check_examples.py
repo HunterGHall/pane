@@ -13,6 +13,8 @@ Comments directly above the fence (one per line) change how a block is checked:
   <!-- stdin: TEXT -->     feed TEXT (with \\n escapes) to the program on standard input
   <!-- args: ARGS -->      pass ARGS on the command line (`bend run-c file ARGS`)
   <!-- runner: rs -->      run with `bend run-rs` instead of run-c (default is run-c, needed for IO)
+  <!-- file: lib/x.bend --> this block is an extra source file (for import lessons): it is written next to
+                        the main program of every other block in the same lesson, and not run itself
 
 Usage: python tools/check_examples.py [--check-only] [files...]
 """
@@ -26,7 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FENCE = re.compile(r"^(`{3,})bend\s*$")
-MARK = re.compile(r"^<!--\s*(check|expect|stdin|args|runner):\s*(.*?)\s*-->\s*$")
+MARK = re.compile(r"^<!--\s*(check|expect|stdin|args|runner|file):\s*(.*?)\s*-->\s*$")
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 
 
@@ -56,14 +58,18 @@ def extract(path):
 
 
 def check(job):
-    path, line, marks, code, check_only = job
+    path, line, marks, code, check_only, aux = job
     mode = marks.get("check", "run")
     where = f"{path.relative_to(ROOT)}:{line}"
-    if mode == "skip":
+    if mode == "skip" or "file" in marks:
         return None
     if not re.search(r"^(def|main|Main)\b", code, re.M) or not re.search(r"^def main|^main|^Main", code, re.M):
         code += "\ndef main():\n  return 0\n"
     with tempfile.TemporaryDirectory() as tmp:
+        for name, text in aux.items():
+            target = Path(tmp) / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(text, encoding="utf-8")
         src = Path(tmp) / "example.bend"
         src.write_text(code, encoding="utf-8")
         if mode == "fail":
@@ -93,7 +99,11 @@ def main():
     files = [Path(a).resolve() for a in args if not a.startswith("--")]
     if not files:
         files = sorted((ROOT / "docs").rglob("*.md"))
-    jobs = [(f, line, marks, code, check_only) for f in files for (line, marks, code) in extract(f)]
+    jobs = []
+    for f in files:
+        blocks = extract(f)
+        aux = {m["file"]: code for (_, m, code) in blocks if "file" in m}
+        jobs += [(f, line, marks, code, check_only, aux) for (line, marks, code) in blocks]
     print(f"Checking {len(jobs)} code blocks from {len(files)} files...")
     failures = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 4) as pool:
