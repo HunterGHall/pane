@@ -37,4 +37,14 @@ echo "== expression-calculator =="
   echo "$out" | grep -q '^error: division by zero$'
 )
 
+echo "== parallel-lab =="
+(
+  cd parallel-lab
+  bend check queens.bend
+  bend check bitonic.bend
+  bend run-c queens.bend 6 | grep -q '^Result: 4$'
+  bend run-c queens.bend 8 | grep -q '^Result: 92$'
+  bend run-c bitonic.bend 8 | grep -q '^Result: 1$'
+)
+
 echo "All capstones OK"

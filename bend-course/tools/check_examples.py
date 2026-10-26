@@ -13,6 +13,8 @@ Comments directly above the fence (one per line) change how a block is checked:
   <!-- stdin: TEXT -->     feed TEXT (with \\n escapes) to the program on standard input
   <!-- args: ARGS -->      pass ARGS on the command line (`bend run-c file ARGS`)
   <!-- runner: rs -->      run with `bend run-rs` instead of run-c (default is run-c, needed for IO)
+  <!-- setup: COMMAND -->  shell command run in the temp directory before the program (e.g. compile a C
+                        library); the environment variable HVM_SRC points at the HVM source directory
   <!-- file: lib/x.bend --> this block is an extra source file (for import lessons): it is written next to
                         the main program of every other block in the same lesson, and not run itself
 
@@ -27,8 +29,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-FENCE = re.compile(r"^(`{3,})bend\s*$")
-MARK = re.compile(r"^<!--\s*(check|expect|stdin|args|runner|file):\s*(.*?)\s*-->\s*$")
+FENCE = re.compile(r"^(`{3,})(\w+)\s*$")
+MARK = re.compile(r"^<!--\s*(check|expect|stdin|args|runner|file|setup):\s*(.*?)\s*-->\s*$")
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 
 
@@ -47,6 +49,7 @@ def extract(path):
                 kind, val = MARK.match(lines[k]).groups()
                 marks[kind] = val
                 k -= 1
+            marks["lang"] = m.group(2)
             start = i + 1
             j = start
             while j < len(lines) and not lines[j].startswith(m.group(1)):
@@ -57,11 +60,17 @@ def extract(path):
     return blocks
 
 
+def hvm_src():
+    import glob
+    hits = sorted(glob.glob(os.path.expanduser("~/.cargo/registry/src/*/hvm-*/src")))
+    return hits[-1] if hits else ""
+
+
 def check(job):
     path, line, marks, code, check_only, aux = job
     mode = marks.get("check", "run")
     where = f"{path.relative_to(ROOT)}:{line}"
-    if mode == "skip" or "file" in marks:
+    if mode == "skip" or "file" in marks or marks.get("lang") != "bend":
         return None
     if not re.search(r"^(def|main|Main)\b", code, re.M) or not re.search(r"^def main|^main|^Main", code, re.M):
         code += "\ndef main():\n  return 0\n"
@@ -70,6 +79,11 @@ def check(job):
             target = Path(tmp) / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(text, encoding="utf-8")
+        if "setup" in marks:
+            env = dict(os.environ, HVM_SRC=hvm_src())
+            s = subprocess.run(marks["setup"], shell=True, cwd=tmp, env=env, capture_output=True, text=True, timeout=120)
+            if s.returncode != 0:
+                return f"{where}: setup failed\n" + (s.stdout + s.stderr)[:600]
         src = Path(tmp) / "example.bend"
         src.write_text(code, encoding="utf-8")
         if mode == "fail":
@@ -103,7 +117,7 @@ def main():
     for f in files:
         blocks = extract(f)
         aux = {m["file"]: code for (_, m, code) in blocks if "file" in m}
-        jobs += [(f, line, marks, code, check_only, aux) for (line, marks, code) in blocks]
+        jobs += [(f, line, marks, code, check_only, aux) for (line, marks, code) in blocks if marks.get("lang") == "bend"]
     print(f"Checking {len(jobs)} code blocks from {len(files)} files...")
     failures = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 4) as pool:
