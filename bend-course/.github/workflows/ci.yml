@@ -1,0 +1,41 @@
+name: Capstones
+
+# Runs every Bend code block in the docs against the real compiler, and builds,
+# runs and smoke-tests the three capstone projects, so the code in the course
+# is always known to work.
+
+on:
+  push:
+    branches: [main]
+    paths: ["capstones/**", "docs/**", "tools/**", ".github/workflows/ci.yml"]
+  pull_request:
+    paths: ["capstones/**", "docs/**", "tools/**", ".github/workflows/ci.yml"]
+  workflow_dispatch:
+
+env:
+  BEND_VERSION: "0.2.38"
+  HVM_VERSION: "2.0.22"
+
+jobs:
+  examples:
+    name: Lesson code blocks run (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin
+          key: bend-${{ runner.os }}-${{ env.BEND_VERSION }}-${{ env.HVM_VERSION }}
+      - name: Install Bend and HVM
+        run: |
+          command -v bend >/dev/null || cargo install hvm --version "$HVM_VERSION" --locked
+          command -v bend >/dev/null || cargo install bend-lang --version "$BEND_VERSION" --locked
+          bend --version
+      - run: python3 tools/sync_capstones.py --check
+      - run: python3 tools/check_examples.py
+      - run: bash capstones/ci.sh

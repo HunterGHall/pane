@@ -1,0 +1,95 @@
+site_name: The Bend Course
+site_description: A complete, self-paced Bend curriculum — beginner to advanced.
+site_url: https://hunterghall.github.io/bend-course/
+repo_url: https://github.com/HunterGHall/bend-course
+repo_name: HunterGHall/bend-course
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - toc.follow
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Beginner:
+      - beginner/index.md
+      - "1. Setup & your first program": beginner/01-setup-and-first-program.md
+      - "2. Values, variables & types": beginner/02-variables-and-types.md
+      - "3. Numbers & math": beginner/03-numbers-and-math.md
+      - "4. Conditionals": beginner/04-booleans-and-conditionals.md
+      - "5. Recursion instead of loops": beginner/05-loops.md
+      - "6. Functions": beginner/06-functions.md
+      - "7. Linearity & duplication": beginner/07-linearity-and-duplication.md
+      - "8. Strings & characters": beginner/08-strings.md
+      - "9. Lists": beginner/09-lists.md
+      - "10. Maps & trees": beginner/10-hashmaps-and-sets.md
+      - "11. Maybe, Result & IO": beginner/11-option-result-and-files.md
+      - "12. Capstone - task tracker": beginner/12-capstone-task-tracker.md
+  - Intermediate:
+      - intermediate/index.md
+      - "1. Algebraic data types": intermediate/01-algebraic-data-types.md
+      - "2. Pattern matching": intermediate/02-pattern-matching.md
+      - "3. Recursion schemes - fold & bend": intermediate/03-fold-and-bend.md
+      - "4. Higher-order functions": intermediate/04-higher-order-functions.md
+      - "5. Generics & the type checker": intermediate/05-generics-and-type-checking.md
+      - "6. Divide and conquer": intermediate/06-divide-and-conquer.md
+      - "7. Data structures": intermediate/07-data-structures.md
+      - "8. Error handling & monads": intermediate/08-error-handling.md
+      - "9. Modules & imports": intermediate/09-modules-and-imports.md
+      - "10. IO in depth": intermediate/10-io-in-depth.md
+      - "11. Testing": intermediate/11-testing.md
+      - "12. Capstone - expression calculator": intermediate/12-capstone-expression-calculator.md
+  - Advanced:
+      - advanced/index.md
+      - "1. How Bend runs - interaction nets & HVM": advanced/01-how-bend-runs.md
+      - "2. Duplications & superpositions": advanced/02-dups-and-sups.md
+      - "3. Parallelism in practice": advanced/03-parallelism-in-practice.md
+      - "4. Performance & profiling": advanced/04-performance.md
+      - "5. Lambda encodings": advanced/05-lambda-encodings.md
+      - "6. Scopeless lambdas": advanced/06-scopeless-lambdas.md
+      - "7. Fusion": advanced/07-fusion.md
+      - "8. Laziness & recursion": advanced/08-laziness-and-recursion.md
+      - "9. Custom monads": advanced/09-custom-monads.md
+      - "10. FFI & dynamic libraries": advanced/10-ffi.md
+      - "11. The compiler & HVM": advanced/11-compiler-and-hvm.md
+      - "12. Capstone - parallel lab": advanced/12-capstone-parallel-lab.md
